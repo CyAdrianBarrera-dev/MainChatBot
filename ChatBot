@@ -1,0 +1,99 @@
+import discord
+from discord.ext import commands
+from bot_logic import gen_pass, gen_emodji, flip_coin
+
+#bot permissions creation
+permissions = discord.Intents.default()
+permissions.message_content = True
+
+#bot creation
+npc = commands.Bot(command_prefix = "&", intents = permissions)
+
+#event creation on_ready
+@npc.event
+async def on_ready():
+    print(f"Bot connected as {npc.user}")
+
+#command creation
+@npc.command()
+async def hello(ctx):
+    await ctx.send("¡Hi! How can I help you?")
+
+@npc.command()
+async def how_are_you(ctx):
+    await ctx.send("I'm good, thanks for asking!")
+
+@npc.command()
+async def where_are_you_from(ctx):
+    await ctx.send("I'm from the software world!")
+
+@npc.command()
+async def what_is_your_favorite_color(ctx):
+    await ctx.send("I prefer most the cyan and white.")
+
+@npc.command()
+async def what_is_your_favorite_platform(ctx):
+    await ctx.send("¡I like most Discord!")
+
+@npc.command()
+async def how_old_are_you(ctx):
+    await ctx.send("I don't know exactly, my age is an enigma.")
+
+@npc.command()
+async def what_is_the_best_programming_language(ctx):
+    await ctx.send("I'd say it is Python.")
+
+@npc.command()
+async def what_is_your_iq_level(ctx):
+    await ctx.send("My IQ level is 200. Haha!")
+
+@npc.command()
+async def generate_password(ctx):
+    password = gen_pass(10)
+    await ctx.send(f"Here is your generated password:{password}")
+
+@npc.command()
+async def emodji(ctx):
+    emoji = gen_emodji()
+    await ctx.send(f"Here is a random emoji for you:{emoji}")
+
+@npc.command()
+async def coin(ctx):
+    result = flip_coin()
+    await ctx.send(f"The resulf of the coin flip is:{result}")
+
+@npc.command()
+async def operations(ctx):
+    await ctx.send("This command can solve math operations \n Basic operations are: addition, subtraction, multiplication, division")
+    def check(m):
+        return m.author == ctx.author and m.channel == ctx.channel
+    operations = await npc.wait_for("message", check = check, timeout = 30)
+    operations = operations.content.lower()
+    if operations not in ["addition", "subtraction", "multiplication", "division"]:
+        return await ctx.send("Invalid operation, try again")
+    
+    await ctx.send("Enter the first number:")
+    number1 = await npc.wait_for("message", check = check, timeout= 30)
+    number1 = float(number1.content)
+
+    await ctx.send("Enter the second number:")
+    number2 = await npc.wait_for("message", check = check, timeout= 30)
+    number2 = float(number2.content)
+
+    result = 0
+    #Operations evaluation
+    if operations == "addition":
+        result = number1 + number2
+    elif operations == "subtraction":
+        result = number1 - number2
+    elif operations == "multiplication":
+        result = number1 * number2
+    elif operations == "division":
+        if number2 != 0:
+            result = number1 / number2
+        else:
+            return await ctx.send("Error: Division by zero isn't allowed")
+    
+    await ctx.send(f"The result of the {operations} between {number1} and {number2} is: {result}")
+
+#npc.run("")
