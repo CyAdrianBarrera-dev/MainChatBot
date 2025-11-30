@@ -49,7 +49,7 @@ async def what_is_your_iq_level(ctx):
 
 @npc.command()
 async def generate_password(ctx):
-    password = gen_pass(10)
+    password = gen_pass(10) 
     await ctx.send(f"Here is your generated password:{password}")
 
 @npc.command()
@@ -96,4 +96,24 @@ async def operations(ctx):
     
     await ctx.send(f"The result of the {operations} between {number1} and {number2} is: {result}")
 
-#npc.run("")
+
+@npc.command()
+async def help_text(ctx):
+    await ctx.send(
+        "Using '&' to chat \n"
+        "Available commands: \n" 
+        "hello \n"
+        "how_are_you \n"
+        "where_are_you_from \n"
+        "what_is_your_favorite_color \n"
+        "what_is_your_favorite_platform \n"
+        "how_old_are_you \n"
+        "what_is_the_best_programming_language \n"
+        "what_is_your_iq_level \n"
+        "generate_password \n"
+        "emodji \n"
+        "coin \n"
+        "operations \n"
+    )
+
+npc.run("")
